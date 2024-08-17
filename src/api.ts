@@ -68,14 +68,12 @@ export function getTopRatedShows() {
 }
 
 export function getSearchMovie(keyword: string) {
-  //https://api.themoviedb.org/3/search/movie?query=blue+blood&api_key=1e6b295b424dafdb9c3150dfd202d0c4
   return fetch(
     `${BASE_PATH}/search/movie?query=${keyword}&api_key=${API_KEY}`
   ).then((response) => response.json());
 }
 
 export function getSearchTv(keyword: string) {
-  //https://api.themoviedb.org/3/search/tv?query=blue+blood&api_key=1e6b295b424dafdb9c3150dfd202d0c4
   return fetch(
     `${BASE_PATH}/search/tv?query=${keyword}&api_key=${API_KEY}`
   ).then((response) => response.json());
