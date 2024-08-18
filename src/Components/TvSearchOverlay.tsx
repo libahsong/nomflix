@@ -124,7 +124,6 @@ function TvSearchOverlay(props: {
                       : null}
                   </li>
                 ) : null}
-
                 <li>
                   <span>genres:</span>
                   {details?.genres

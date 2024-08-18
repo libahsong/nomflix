@@ -114,10 +114,6 @@ function SearchOverlay(props: {
                   <span>genres:</span>
                   {details?.genres.map((v) => v.name).join()}
                 </li>
-
-                <li>
-                  <span>adult:{details?.adult}</span>
-                </li>
               </BigMovieInfo>
             </BigContainer>
           </>
