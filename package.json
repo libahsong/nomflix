@@ -1,4 +1,5 @@
 {
+  "homepage": "https://libahsong.github.io/nomflix",
   "name": "react-masterclass-ts",
   "version": "0.1.0",
   "private": true,
@@ -13,6 +14,7 @@
     "@types/styled-components": "^5.1.34",
     "apexcharts": "^3.49.0",
     "framer-motion": "^11.2.10",
+    "gh-pages": "^6.1.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-beautiful-dnd": "^13.1.1",
@@ -28,6 +30,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

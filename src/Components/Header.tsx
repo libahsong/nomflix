@@ -86,7 +86,7 @@ const SearchItems = styled(motion.div)`
 
 const SearchIcon = styled(motion.svg)`
   height: 25px;
-  z-index: 1;
+  z-index: 2;
   margin: 0 auto;
   /* position: absolute; */
 `;
@@ -108,13 +108,14 @@ const Input = styled(motion.input)`
   outline: none;
   width: 33vh;
   height: 3.8vh;
-  padding: 0 30px;
+  padding: 0 40px;
 `;
 const Close = styled(motion.svg)`
   width: 10px;
   /* height: 10px; */
   cursor: pointer;
   margin: 0 auto;
+  z-index: 2;
 `;
 const logoVariants = {
   normal: { fillOpacity: 1 },
@@ -216,7 +217,7 @@ function Header() {
           <SearchIcon
             onClick={toggleSearch}
             initial={{ x: 250 }}
-            animate={{ x: searchOpen ? 0 : 250 }}
+            animate={{ x: searchOpen ? 30 : 250 }}
             transition={{ type: "linear", duration: 0.3 }}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -245,7 +246,11 @@ function Header() {
         <Close
           onClick={closeClick}
           initial={{ scaleX: 0 }}
-          animate={{ scaleX: closeButton ? 1 : 0 }}
+          animate={{
+            scaleX: closeButton ? 1 : 0,
+            x: -25,
+            background: "black",
+          }}
           fill="currentColor"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 384 512"
