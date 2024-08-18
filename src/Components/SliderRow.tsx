@@ -1,59 +1,44 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { AnimatePresence, useScroll, motion } from "framer-motion";
 import { useQuery } from "react-query";
-import { getMovies, getPopularMovies, IGetMovieResult } from "../api";
+import { IGetMovieResult } from "../api";
 import { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { makeImagePath } from "../utils";
+import { useRecoilState } from "recoil";
+import { paramIdState } from "../atoms";
+import MovieOverlay from "./MovieOverlay";
+import TvOverlay from "./TvOverlay";
 
 export const Slider = styled.div`
-  /* position: relative; */
-  box-sizing: border-box;
   margin: 3vw 0;
-  /* position: absolute; */
-  /* top: -110px; */
-  /* min-height: 190px; */
   padding: 0 60px;
+  z-index: 1;
 `;
 
 export const RowHover = styled.div`
-  /* padding: 0 60px; */
-  /* padding: 28.5% 0; */
-  /* height: 100%; */
   height: 166px;
   box-sizing: border-box;
-  /* padding: 0 4%; */
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 100%; */
-  /* overflow-x: visible; */
 `;
 export const Row = styled(motion.div)<{ $movies: any }>`
   width: 100%;
   height: 100%;
   display: grid;
   gap: 5px;
-  /* grid-template-columns: repeat(${(props) => props.$movies}, 1fr); */
   grid-template-columns: repeat(6, 1fr);
   position: absolute;
-  /* position: relative; */
-  /* height: 170px; */
-  /* z-index: 1; */
-  /* box-sizing: border-box; */
+  z-index: 1;
 `;
 
 export const Box = styled(motion.div)<{ $bgPhoto: string }>`
-  /* z-index: 0; */
   background-color: white;
-  /* height: 166px; */
-  /* width: 100%; */
-  /* height: 100%; */
-  /* padding: 28.5% 0; */
   background-image: url(${(props) => props.$bgPhoto});
   background-size: cover;
-  /* background-size: contain; */
   background-repeat: no-repeat;
   background-position: center;
   font-size: 66px;
@@ -65,29 +50,23 @@ export const Box = styled(motion.div)<{ $bgPhoto: string }>`
     transform-origin: center right;
   }
   border-radius: 5px;
-  /* position: relative; */
-  /* position: absolute; */
-  //display: inline-block;
-  //width: 330px;
-  /* box-sizing: border-box; */
-  /* overflow-y: hidden; */
-
+  box-sizing: border-box;
   img {
     width: 100%;
     height: 100%;
     object-fit: fill;
-    /* height: 100%; */
   }
 `;
 
+export const Buttons = styled.div`
+  width: 10px;
+`;
 export const Info = styled(motion.div)`
   padding: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: ${(props) => props.theme.black.darker};
   opacity: 0;
-  /* background-color: rgba(170, 166, 166, 0.5); */
   border-radius: 3px;
   color: #ece4e4;
-  font-weight: 600;
   position: absolute;
   width: 100%;
   bottom: 0;
@@ -102,7 +81,7 @@ export const Overlay = styled(motion.div)`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   opacity: 0;
   z-index: 2;
 `;
@@ -114,7 +93,7 @@ export const BigMovie = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.black.lighter};
+  background-color: ${(props) => props.theme.black.veryDark};
   border-radius: 15px;
   overflow: hidden;
   z-index: 4;
@@ -133,11 +112,33 @@ export const BigTitle = styled.h3`
   position: relative;
   top: -80px;
 `;
+
+export const BigContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+`;
+
 export const BigOverview = styled.p`
   color: ${(props) => props.theme.white.lighter};
   position: relative;
   top: -80px;
   padding: 20px;
+  font-weight: 350;
+  span {
+    margin-right: 10px;
+  }
+`;
+
+export const BigMovieInfo = styled.ul`
+  span {
+    color: grey;
+  }
+  font-weight: 350;
+  /* color: white; */
 `;
 
 const Prev = styled.span`
@@ -147,7 +148,6 @@ const Prev = styled.span`
   align-items: center;
   justify-content: center;
   left: -60px;
-  /* width: 4%; */
   width: 60px;
   height: 100%;
   font-size: 28px;
@@ -162,7 +162,6 @@ const Next = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* width: 4%; */
   width: 60px;
   height: 100%;
   font-size: 28px;
@@ -171,11 +170,7 @@ const Next = styled.span`
   opacity: 1;
 `;
 
-const RowMask = styled.div`
-  width: 100%;
-`;
-
-const Category = styled.h2`
+export const Category = styled.h2`
   margin-bottom: 10px;
   font-size: 30px;
   font-weight: 580;
@@ -211,9 +206,7 @@ const rowVariants = {
 const boxVariants = {
   normal: { scale: 1 },
   hover: {
-    scale: 1.3,
-    // zIndex: 2,
-    // y: -50,
+    scale: 1.2,
     transition: { delay: 0.5, duration: 0.1, type: "tween" },
   },
 };
@@ -229,7 +222,9 @@ const offset = 6;
 interface ITitleList {
   [key: string]: string;
 }
-const titleList: ITitleList = {
+export const titleList: ITitleList = {
+  movies: "Movie List",
+  tvShows: "TV Show List",
   now: "Now Playing Movies",
   popular: "Popular Movies",
   top: "Top Rated Movies",
@@ -249,9 +244,9 @@ function SliderRow(props: {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setBack] = useState(false);
-  const [front, setFront] = useState(false);
-  const [remainder, setRemainder] = useState(0);
   const [change, setChange] = useState(0);
+  const [queryId, setQueryId] = useRecoilState(paramIdState);
+
   const history = useHistory();
 
   const bigMovieMatch = useRouteMatch<{ movieId: string; title: string }>(
@@ -271,32 +266,28 @@ function SliderRow(props: {
   console.log("urlMatch=>", urlMatch);
 
   const { scrollY } = useScroll();
+  console.log("SliderRow", scrollY.get());
 
   const next = () => {
     if (change === 0) setChange(1);
     setBack(false);
-    setFront(true);
     if (data) {
       if (leaving) return;
       toggleLeaving();
       const totalMovies = data.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
-      // const maxIndex = Math.floor(totalMovies / offset);
-      setRemainder(totalMovies % offset);
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
       console.log("next", index, maxIndex);
     }
   };
 
   const prev = () => {
-    setFront(false);
     setBack(true);
     if (data) {
       if (leaving) return;
       toggleLeaving();
       const totalMovies = data.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
-      // const maxIndex = Math.floor(totalMovies / offset);
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
       console.log("prev", index);
     }
@@ -307,28 +298,23 @@ function SliderRow(props: {
   };
   const onBoxClicked = (movieId: number, title: string, category: string) => {
     if (category === "movies") {
+      setQueryId(+movieId);
       history.push(`/movies/${title}/${movieId}`);
     } else if (category === "tv") {
+      setQueryId(+movieId);
       history.push(`/tv/${title}/${movieId}`);
     }
-  };
-
-  const onOverlayClick = () => {
-    if (category === "movies") return history.push("/");
-    if (category === "tv") return history.push("/tv");
   };
 
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     bigMovieMatch?.params.title === title &&
     data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId);
-  // console.log("clickedMovie=>", clickedMovie);
 
   const clickedTv =
     bigTvMatch?.params.movieId &&
     bigTvMatch?.params.title === title &&
     data?.results.find((movie) => movie.id === +bigTvMatch.params.movieId);
-  // console.log("clickedTv=>", clickedTv);
 
   let clickedContent = null;
 
@@ -337,7 +323,6 @@ function SliderRow(props: {
     : clickedTv
     ? (clickedContent = clickedTv)
     : (clickedContent = null);
-  // console.log("clickedContent=>", clickedContent);
 
   return (
     <>
@@ -384,7 +369,6 @@ function SliderRow(props: {
                     // $bgPhoto={makeImagePath(movie.poster_path, "w500")}
                     onClick={() => onBoxClicked(movie.id, title, category)}
                   >
-                    {/* <img src={makeImagePath(movie.poster_path, "w500")} /> */}
                     <Info variants={infoVariants}>
                       <h4>
                         {category === "movies" ? movie.title : movie.name}
@@ -399,42 +383,23 @@ function SliderRow(props: {
           </Next>
         </RowHover>
       </Slider>
-      <AnimatePresence>
-        {urlMatch ? (
-          <>
-            <Overlay
-              onClick={onOverlayClick}
-              exit={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            />
-            {urlMatch?.params.title === title ? (
-              <BigMovie
-                layoutId={urlMatch.params.movieId + title}
-                style={{ top: scrollY.get() + 100 }}
-              >
-                {clickedContent ? (
-                  <>
-                    <BigCover
-                      style={{
-                        backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
-                          clickedContent.backdrop_path,
-                          "w500"
-                        )})`,
-                      }}
-                    />
-                    <BigTitle>
-                      {category === "movies"
-                        ? clickedContent.title
-                        : clickedContent.name}
-                    </BigTitle>
-                    <BigOverview>{clickedContent.overview}</BigOverview>
-                  </>
-                ) : null}
-              </BigMovie>
-            ) : null}
-          </>
-        ) : null}
-      </AnimatePresence>
+      {urlMatch && category === "movies" && queryId !== 0 ? (
+        <MovieOverlay
+          urlMatch={urlMatch}
+          title={title}
+          scrollY={scrollY}
+          clickedContent={clickedContent}
+          category={category}
+        />
+      ) : urlMatch && queryId !== 0 ? (
+        <TvOverlay
+          urlMatch={urlMatch}
+          title={title}
+          scrollY={scrollY}
+          clickedContent={clickedContent}
+          category={category}
+        />
+      ) : null}
     </>
   );
 }

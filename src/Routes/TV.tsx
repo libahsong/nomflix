@@ -64,7 +64,7 @@ function Tv() {
     ["tvShows", "airingToday"],
     getAiringTody
   );
-  // console.log("airingShows=>", airingShows);
+  console.log("airingShows=>", airingShows);
   const { data: onAirShows, isLoading: onAirLoading } =
     useQuery<IGetMovieResult>(["tvShows", "onTheAir"], getOnTheAir);
   // console.log("onAirShows=>", onAirShows);
