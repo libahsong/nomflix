@@ -6,10 +6,12 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { hoverState } from "../atoms";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -85,10 +87,10 @@ const SearchItems = styled(motion.div)`
 `;
 
 const SearchIcon = styled(motion.svg)`
-  height: 25px;
+  height: 3.9vh;
+  padding: 5px 5px;
   z-index: 2;
   margin: 0 auto;
-  /* position: absolute; */
 `;
 
 const Search = styled(motion.form)`
@@ -106,12 +108,14 @@ const Input = styled(motion.input)`
   background: transparent;
   border: none;
   outline: none;
-  width: 33vh;
+  width: 32vh;
   height: 3.8vh;
   padding: 0 40px;
 `;
 const Close = styled(motion.svg)`
-  width: 10px;
+  height: 3.9vh;
+  padding: 10px 10px;
+  /* width: 10px; */
   /* height: 10px; */
   cursor: pointer;
   margin: 0 auto;
@@ -135,21 +139,25 @@ interface IForm {
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [closeButton, setCloseButton] = useState(false);
+  const [hovering, setHovering] = useRecoilState(hoverState);
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
   const history = useHistory();
-  const { register, handleSubmit, setFocus, setValue } = useForm<IForm>();
+  const { register, handleSubmit, setFocus, setValue, getValues } =
+    useForm<IForm>();
+
   const onValid = (data: IForm) => {
     // console.log("onValid", data);
+
+    // history.push(`/search?keyword=${data.keyword}`);
     history.push(`/search?keyword=${data.keyword}`);
   };
 
   const toggleSearch = () => {
-    console.log("searchOpen", searchOpen);
-
+    // console.log("searchOpen", searchOpen);
     setCloseButton(false);
     if (searchOpen) {
       inputAnimation.start({ scaleX: 0 });
@@ -166,11 +174,12 @@ function Header() {
   const closeClick = () => {
     setValue("keyword", "");
     setCloseButton(false);
+    setFocus("keyword");
     history.push("/");
   };
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    console.log("Page scroll: ", latest);
+    // console.log("Page scroll: ", latest);
     if (scrollY.get() > 80) {
       navAnimation.start("scroll");
     } else {
@@ -179,7 +188,12 @@ function Header() {
   });
 
   return (
-    <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
+    <Nav
+      // style={{ zIndex: hovering ? 3 : 5 }}
+      variants={navVariants}
+      animate={navAnimation}
+      initial={"top"}
+    >
       <Col>
         <Link to="/">
           <Logo
@@ -211,13 +225,17 @@ function Header() {
       </Col>
       <Col>
         <Search
-          onChange={handleSubmit(onValid)}
+          // onChange={handleSubmit(onValid)}
+          onKeyUp={handleSubmit(onValid)}
           onSubmit={handleSubmit(onValid)}
         >
           <SearchIcon
             onClick={toggleSearch}
-            initial={{ x: 250 }}
-            animate={{ x: searchOpen ? 30 : 250 }}
+            initial={{ x: 220 }}
+            animate={{
+              x: searchOpen ? 30 : 220,
+              background: searchOpen ? "black" : "transparent",
+            }}
             transition={{ type: "linear", duration: 0.3 }}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -230,16 +248,32 @@ function Header() {
             ></path>
           </SearchIcon>
           <Input
-            {...register("keyword", { required: true, minLength: 1 })}
-            transition={{ type: "linear" }}
+            {...register("keyword", {
+              required: true,
+              minLength: 1,
+            })}
+            transition={{ type: "tween" }}
             initial={{ scaleX: 0 }}
             animate={inputAnimation}
             placeholder="Search for movie or tv show..."
-            onKeyDown={() => {
+            onKeyUp={() => {
               setCloseButton(true);
+              const { keyword } = getValues();
+              if (keyword === "") {
+                setCloseButton(false);
+                history.push("/");
+              }
             }}
             onClick={() => {
               setFocus("keyword");
+            }}
+            onBlur={() => {
+              const { keyword } = getValues();
+              if (keyword !== "") {
+                return;
+              } else {
+                toggleSearch();
+              }
             }}
           />
         </Search>
@@ -257,7 +291,6 @@ function Header() {
         >
           <path d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z" />
         </Close>
-        {/* </SearchItems> */}
       </Col>
     </Nav>
   );

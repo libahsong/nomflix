@@ -110,8 +110,38 @@ export interface IGetMovieCredits {
   crew: ICrew[];
 }
 
+export interface IMovieCertification {
+  id: number;
+  results: IMCResults[];
+}
+
+export interface IMCResults {
+  iso_3166_1: string;
+  release_dates: [
+    {
+      certification: string;
+      descriptors: [];
+      iso_639_1: string;
+      note: string;
+      release_date: string;
+      type: number;
+    }
+  ];
+}
+
+export interface ITvRating {
+  results: ITRResults[];
+  id: number;
+}
+
+export interface ITRResults {
+  descriptors: [];
+  iso_3166_1: string;
+  rating: string;
+}
+
 export function getMovies() {
-  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`).then(
+  return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&page=1`).then(
     (response) => response.json()
   );
 }
@@ -197,5 +227,17 @@ export function getMovieCredits(id: number | null) {
 export function getTvCredits(id: number | null) {
   return fetch(
     `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}`
+  ).then((response) => response.json());
+}
+
+export function getMovieCertification(id: number | null) {
+  return fetch(
+    `https://api.themoviedb.org/3/movie/${id}/release_dates?api_key=${API_KEY}`
+  ).then((response) => response.json());
+}
+
+export function getTvRating(id: number | null) {
+  return fetch(
+    `https://api.themoviedb.org/3/tv/${id}/content_ratings?api_key=${API_KEY}`
   ).then((response) => response.json());
 }

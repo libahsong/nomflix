@@ -14,7 +14,10 @@ import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background: black;
+  padding: 0 0 50px;
+
   overflow-x: hidden;
+  overflow-y: hidden;
   /* width: 100vw; */
   /* min-height: 1000px; */
   /* position: relative; */
@@ -42,13 +45,19 @@ const Banner = styled.div<{ $bgPhoto: string }>`
   background-size: cover;
 `;
 const Title = styled.h2`
-  font-size: 68px;
-  margin-bottom: 20px;
-  font-weight: 900;
+  /* font-size: 68px; */
+  margin-bottom: 3vw;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 1.25vw;
 `;
 
 const Overview = styled.p`
-  font-size: 30px;
+  /* font-size: 30px; */
+  color: #fff;
+  font-size: 1.2vw;
+  font-weight: 400;
+  line-height: normal;
   width: 50%;
 `;
 
@@ -73,7 +82,7 @@ function Tv() {
   // console.log("popularShows", popularShows);
   const { data: topRatedShows, isLoading: topRatedLoading } =
     useQuery<IGetMovieResult>(["tvShows", "topRated"], getTopRatedShows);
-  console.log("topRatedShows", topRatedShows);
+  // console.log("topRatedShows", topRatedShows);
 
   return (
     <Wrapper>

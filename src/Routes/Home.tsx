@@ -13,11 +13,23 @@ import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background: black;
+  padding: 0 0 50px;
+  /* overflow-x: visible;
+  overflow-y: visible; */
+
+  /* &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none; */
+
   /* overflow-x: hidden; */
+  /* overflow: hidden; */
   /* overflow-y: hidden; */
+  /* z-index: -3; */
   /* width: 100vw; */
   /* min-height: 1000px; */
-  position: relative;
+  /* position: relative; */
   /* z-index: 0; */
   /* display: flex; */
   /* flex-direction: column; */
@@ -48,13 +60,19 @@ const Banner = styled.div<{ $bgPhoto: string }>`
   /* z-index: -2; */
 `;
 const Title = styled.h2`
-  font-size: 68px;
-  margin-bottom: 20px;
-  font-weight: 900;
+  /* font-size: 68px; */
+  margin-bottom: 3vw;
+  font-weight: 400;
+  font-size: 5vw;
+  line-height: 1.25vw;
 `;
 
 const Overview = styled.p`
-  font-size: 30px;
+  /* font-size: 30px; */
+  color: #fff;
+  font-size: 1.2vw;
+  font-weight: 400;
+  line-height: normal;
   width: 50%;
 `;
 
@@ -63,7 +81,8 @@ const Sliders = styled.div`
   //position: absolute;
   //top: 80vh;
   //width: 100%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  /* overflow-y: hidden; */
   /* position: relative; //BigMovie card scrollY().get+100 is going to be related to Sliders scrollY */
   /* display: grid; */
   /* grid-template-rows: auto; */
@@ -75,11 +94,11 @@ function Home() {
     ["movies", "nowPlaying"],
     getMovies
   );
-  console.log("nowMovies", nowMovies);
+  // console.log("nowMovies", nowMovies);
 
   const { data: popularMovies, isLoading: popularLoading } =
     useQuery<IGetMovieResult>(["movies", "popular"], getPopularMovies);
-  console.log("popularMovies=>", popularMovies);
+  // console.log("popularMovies=>", popularMovies);
 
   const { data: topRated, isLoading: topRatedLoading } =
     useQuery<IGetMovieResult>(["movies", "topRated"], getTopRated);
@@ -100,7 +119,12 @@ function Home() {
             <Overview>{nowMovies?.results[0].overview}</Overview>
           </Banner>
           <Sliders>
-            <SliderRow category="movies" title="now" data={nowMovies} />
+            <SliderRow
+              key="now"
+              category="movies"
+              title="now"
+              data={nowMovies}
+            />
             {popularMovies ? (
               <SliderRow
                 category="movies"
@@ -109,10 +133,20 @@ function Home() {
               />
             ) : null}
             {topRated ? (
-              <SliderRow category="movies" title="top" data={topRated} />
+              <SliderRow
+                key="top"
+                category="movies"
+                title="top"
+                data={topRated}
+              />
             ) : null}
             {upcoming ? (
-              <SliderRow category="movies" title="upcoming" data={upcoming} />
+              <SliderRow
+                key="upcoming"
+                category="movies"
+                title="upcoming"
+                data={upcoming}
+              />
             ) : null}
           </Sliders>
         </>

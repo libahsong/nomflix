@@ -12,5 +12,23 @@ declare module "styled-components" {
       darker: string;
       lighter: string;
     };
+    rating: {
+      g: string;
+      pg: string;
+      pg13: string;
+      r: string;
+      nc17: string;
+      nr: string;
+    };
+    tvRating: {
+      tvma: string;
+      tv14: string;
+      tvpg: string;
+      tvg: string;
+      tvy7: string;
+      tvy7fv: string;
+      tvy: string;
+      nr: string;
+    };
   }
 }

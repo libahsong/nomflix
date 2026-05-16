@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { getSearchMovie, getSearchTv, IGetMovieResult } from "../api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BigCover,
   BigMovie,
@@ -13,7 +13,7 @@ import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { makeImagePath } from "../utils";
 import styled from "styled-components";
 import SearchRow from "../Components/SearchRow";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { categoryState, paramIdState } from "../atoms";
 import SearchOverlay from "../Components/SearchOverlay";
 import MovieOverlay from "../Components/MovieOverlay";
@@ -24,14 +24,17 @@ const Wrapper = styled.div`
   /* min-height: 1000px; */
   position: relative;
   z-index: 0;
+  padding: 0 0 50px;
+
   overflow-x: hidden;
+  overflow-y: hidden;
 `;
 
 const Keywords = styled.div`
   line-height: 1.6;
   display: flex;
   /* display: inline-block; */
-  min-height: 65px;
+  /* min-height: 65px; */
   width: 100%;
   font-size: 1.5vw;
   span {
@@ -70,14 +73,28 @@ function Search() {
 
   const keyword = new URLSearchParams(location.search).get("keyword");
   const id = new URLSearchParams(location.search).get("movieId");
-  const [queryId, setQueryId] = useRecoilState(paramIdState);
-  setQueryId(id ? +id : 0);
+  // const [queryId, setQueryId] = useRecoilState(paramIdState);
+  const setQueryId = useSetRecoilState(paramIdState);
+
+  // setQueryId(id ? +id : 0);
   const category = useRecoilValue(categoryState);
-  console.log("category", category);
+  // console.log("category", category);
 
-  console.log("typof id", typeof id, id);
+  // console.log("typof id", typeof id, id);
 
-  console.log("keyword", keyword);
+  // console.log("keyword", keyword);
+  const [newKeyword, setNewKeyword] = useState<string | null>();
+  useEffect(() => {
+    setQueryId(id ? +id : 0);
+    // console.log("useEffect keyword", keyword);
+    // console.log("useEffect newkeyword", newKeyword);
+    // console.log("category", category);
+
+    setNewKeyword(keyword);
+  }, [keyword]);
+
+  // console.log("rerendering keyword", keyword);
+  // console.log("rerendering newkeyword", newKeyword);
 
   const useMultipleQuery = () => {
     const movies = useQuery<IGetMovieResult>(["searchMovies", keyword], () =>
@@ -94,8 +111,8 @@ function Search() {
     { data: searchTvShows, isLoading: searchingTvShows },
   ] = useMultipleQuery();
 
-  console.log("searchTvShows", searchTvShows);
-  console.log("searchMovies", searchMovies);
+  // console.log("searchTvShows", searchTvShows);
+  // console.log("searchMovies", searchMovies);
 
   // const urlMatch = useRouteMatch<{ movieId: string; keyword: string }>(
   //   `/search/:q/:movieId`
@@ -110,17 +127,17 @@ function Search() {
       ? searchTvShows.results.find((movie) => movie.id === +id)
       : null;
 
-  console.log(
-    "TVclickedContent",
-    id ? searchTvShows?.results.find((movie) => movie.id === +id) : "no Id",
-    clickedContent
-  );
+  // console.log(
+  //   "TVclickedContent",
+  //   id ? searchTvShows?.results.find((movie) => movie.id === +id) : "no Id",
+  //   clickedContent
+  // );
 
-  console.log(
-    "MOVIEclickedContent",
-    id ? searchMovies?.results.find((movie) => movie.id === +id) : "no Id",
-    clickedContent
-  );
+  // console.log(
+  //   "MOVIEclickedContent",
+  //   id ? searchMovies?.results.find((movie) => movie.id === +id) : "no Id",
+  //   clickedContent
+  // );
 
   const history = useHistory();
   const onOverlayClick = () => {
@@ -129,7 +146,7 @@ function Search() {
     history.push(`/search?keyword=${keyword}`);
   };
   const { scrollY } = useScroll();
-  console.log("scrollY.get()", scrollY.get());
+  // console.log("scrollY.get()", scrollY.get());
 
   return (
     <>
@@ -143,18 +160,20 @@ function Search() {
               ))}
             </ul>
           </Keywords>
-          {searchMovies && keyword ? (
+          {searchMovies && keyword === newKeyword ? (
             <SearchRow
               keyword={keyword}
               data={searchMovies}
               category="movies"
+              key="movies"
             />
           ) : null}
-          {searchTvShows && keyword ? (
+          {searchTvShows && keyword === newKeyword ? (
             <SearchRow
               keyword={keyword}
               data={searchTvShows}
               category="tvShows"
+              key="tvShows"
             />
           ) : null}
         </SearchRowContainer>
@@ -162,14 +181,14 @@ function Search() {
           <BigCardOverlay keyword={keyword} id={id} content={clickedContent} />
         ) : null} */}
         {/* <AnimatePresence> */}
-        {id && keyword === "movies" && clickedContent ? (
+        {id && keyword && category === "movies" && clickedContent ? (
           <SearchOverlay
             keyword={keyword}
             id={id}
             scrollY={scrollY}
             clickedContent={clickedContent}
           />
-        ) : id && keyword && clickedContent ? (
+        ) : id && keyword && category === "tvShows" && clickedContent ? (
           <TvSearchOverlay
             keyword={keyword}
             id={id}
