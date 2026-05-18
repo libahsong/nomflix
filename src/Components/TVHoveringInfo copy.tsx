@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import styled from "styled-components";
@@ -8,9 +10,6 @@ import {
   IMovie,
   ITvRating,
 } from "../api";
-import { useRecoilState } from "recoil";
-import { paramIdState } from "../atoms";
-import { useState } from "react";
 
 export const HoveringContainer = styled(motion.div)``;
 

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { IGetMovieResult } from "../api";
