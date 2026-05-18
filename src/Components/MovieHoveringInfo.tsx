@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import styled from "styled-components";
@@ -8,11 +10,6 @@ import {
   IMovie,
   IMovieCertification,
 } from "../api";
-import { useRecoilState } from "recoil";
-import { paramIdState } from "../atoms";
-import { Box } from "./SliderRow";
-import { makeImagePath } from "../utils";
-import { useEffect, useState } from "react";
 
 export const HoveringContainer = styled(motion.div)`
   /* position: absolute; */
@@ -20,17 +17,11 @@ export const HoveringContainer = styled(motion.div)`
 
 export const InfoContainer = styled(motion.div)`
   opacity: 0;
-  /* box-sizing: border-box; */
-  /* width: 100%; */
-  /* z-index: 10; */
   padding: 1vw;
-  /* visibility: hidden; */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* position: relative; */
   width: 100%;
-  /* top: -1px; */
   border-radius: 0 0 3px 3px;
   color: #ece4e4;
   background-color: ${(props) => props.theme.black.darker};
@@ -39,26 +30,13 @@ export const InfoContainer = styled(motion.div)`
     font-size: 1.2vw;
     opacity: 1;
     font-weight: 500;
-    /* position: absolute; */
-    /* bottom: 0; */
   }
-`;
-const IconsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 export const Icons = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0.2vw;
-`;
-
-const PlayIcon = styled.svg`
-  width: 2vw;
-  height: 2vw;
-  fill: white;
-  cursor: pointer;
 `;
 
 export const AddIcon = styled(motion.div)`
@@ -80,10 +58,6 @@ export const AddIcon = styled(motion.div)`
     fill: white;
   }
 `;
-
-const ThumbIcon = styled(AddIcon)``;
-
-const OpenIcon = styled(AddIcon)``;
 
 const ReleaseInfo = styled.div`
   display: flex;
@@ -139,14 +113,6 @@ const Genres = styled.div`
     font-weight: 700;
   }
 `;
-
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    // visibility: "visible" as const, //const assertion
-    transition: { delay: 0.4, duration: 0.1, ease: "easeInOut" },
-  },
-};
 
 export const boxMaskVariants = {
   normal: { scale: 1 },
