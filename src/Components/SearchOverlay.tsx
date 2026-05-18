@@ -2,7 +2,6 @@ import { useHistory } from "react-router-dom";
 import {
   BigContainer,
   BigMovie,
-  BigMovieGradient,
   BigMovieInfo,
   BigOverview,
   BigTitle,
@@ -16,7 +15,7 @@ import {
   IMovie,
 } from "../api";
 import { makeImagePath } from "../utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import { useRecoilState } from "recoil";
 import { paramIdState } from "../atoms";
@@ -29,8 +28,8 @@ const BigCover = styled.div<{ $bgPhoto: string | null }>`
   z-index: -1;
   width: 100%;
   height: 23vw;
-  /* background-image: url(${(props) => props.$bgPhoto}); */
-  background: linear-gradient(
+  background:
+    linear-gradient(
       rgba(24, 24, 24, 0),
       rgba(24, 24, 24, 0),
       rgba(24, 24, 24, 1)
@@ -86,11 +85,6 @@ const AddIcon = styled(motion.div)`
 
 const ThumbIcon = styled(AddIcon)``;
 
-const overlayVariants = {
-  animate: { opacity: 1, transition: { duration: 0.5, ease: "easeInOut" } },
-  exit: { opacity: 0, transition: { duration: 0.5, ease: "easeInOut" } },
-};
-
 function SearchOverlay(props: {
   keyword: string;
   id: string;
@@ -101,7 +95,6 @@ function SearchOverlay(props: {
 
   const { keyword, id, scrollY, clickedContent } = props;
   const [queryId, setQueryId] = useRecoilState(paramIdState);
-  console.log("!!!!!!!!!!!!!!!!!!props id", id, "Recoil queryId", queryId);
 
   const history = useHistory();
   const onOverlayClick = () => {
@@ -111,15 +104,14 @@ function SearchOverlay(props: {
   };
   const { data: details, isLoading: isMovieDetails } =
     useQuery<IGetMovieDetails>(["movie", "movieDetails"], () =>
-      getMovieDetails(queryId)
+      getMovieDetails(queryId),
     );
   const { data: credits, isLoading: isTvDetails } = useQuery<IGetMovieCredits>(
     ["movie", "movieCredits"],
-    () => getMovieCredits(queryId)
+    () => getMovieCredits(queryId),
   );
 
   return (
-    // <AnimatePresence>
     <>
       <Overlay
         onClick={onOverlayClick}
@@ -128,23 +120,11 @@ function SearchOverlay(props: {
         }}
         exit={{ opacity: 0, transition: { ease: "linear", duration: 1 } }}
       />
-      <BigMovie
-        // layoutId={urlMatch.params.movieId}
-        layoutId={id}
-        style={{ top: scrollY.get() + 100 }}
-      >
-        {/* <BigMovieGradient> */}
+      <BigMovie layoutId={id} style={{ top: scrollY.get() + 100 }}>
         {clickedContent ? (
           <>
             <BigCover
               $bgPhoto={makeImagePath(clickedContent.backdrop_path, "w500")}
-
-              // style={{
-              //   backgroundImage: `linear-gradient(to top, black, transparent),url(${makeImagePath(
-              //     clickedContent.backdrop_path,
-              //     "w500"
-              //   )})`,
-              // }}
             >
               <BigTitle>
                 <h2>
@@ -235,10 +215,8 @@ function SearchOverlay(props: {
             </BigContainer>
           </>
         ) : null}
-        {/* </BigMovieGradient> */}
       </BigMovie>
     </>
-    // </AnimatePresence>
   );
 }
 

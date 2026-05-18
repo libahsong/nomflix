@@ -2,39 +2,25 @@ import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import {
-  getMovieCertification,
-  getMovieDetails,
   getTvDetails,
   getTvRating,
-  IGetMovieDetails,
   IGetTvDetails,
   IMovie,
-  IMovieCertification,
   ITvRating,
 } from "../api";
 import { useRecoilState } from "recoil";
 import { paramIdState } from "../atoms";
-import { Box } from "./SliderRow";
-import { makeImagePath } from "../utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export const HoveringContainer = styled(motion.div)`
-  /* position: absolute; */
-`;
+export const HoveringContainer = styled(motion.div)``;
 
 export const InfoContainer = styled(motion.div)`
   opacity: 0;
-  /* box-sizing: border-box; */
-  /* width: 100%; */
-  /* z-index: 10; */
   padding: 1vw;
-  /* visibility: hidden; */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* position: relative; */
   width: 100%;
-  /* top: -1px; */
   border-radius: 0 0 3px 3px;
   color: #ece4e4;
   background-color: ${(props) => props.theme.black.darker};
@@ -43,26 +29,13 @@ export const InfoContainer = styled(motion.div)`
     font-size: 1.2vw;
     opacity: 1;
     font-weight: 500;
-    /* position: absolute; */
-    /* bottom: 0; */
   }
-`;
-const IconsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 export const Icons = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0.2vw;
-`;
-
-const PlayIcon = styled.svg`
-  width: 2vw;
-  height: 2vw;
-  fill: white;
-  cursor: pointer;
 `;
 
 export const AddIcon = styled(motion.div)`
@@ -85,10 +58,6 @@ export const AddIcon = styled(motion.div)`
   }
 `;
 
-const ThumbIcon = styled(AddIcon)``;
-
-const OpenIcon = styled(AddIcon)``;
-
 const ReleaseInfo = styled.div`
   display: flex;
   align-items: center;
@@ -104,18 +73,18 @@ const RatingIcon = styled.div<{ $rating: string | null }>`
     props.$rating === "TV-G"
       ? props.theme.tvRating.tvg
       : props.$rating === "TV-Y"
-      ? props.theme.tvRating.tvy
-      : props.$rating === "TV-PG"
-      ? props.theme.rating.pg13
-      : props.$rating === "TV-Y7"
-      ? props.theme.tvRating.tvy7
-      : props.$rating === "TV-Y7-FV"
-      ? props.theme.tvRating.tvy7fv
-      : props.$rating === "TV-14"
-      ? props.theme.tvRating.tv14
-      : props.$rating === "TV-MA"
-      ? props.theme.tvRating.tvma
-      : props.theme.tvRating.nr};
+        ? props.theme.tvRating.tvy
+        : props.$rating === "TV-PG"
+          ? props.theme.rating.pg13
+          : props.$rating === "TV-Y7"
+            ? props.theme.tvRating.tvy7
+            : props.$rating === "TV-Y7-FV"
+              ? props.theme.tvRating.tvy7fv
+              : props.$rating === "TV-14"
+                ? props.theme.tvRating.tv14
+                : props.$rating === "TV-MA"
+                  ? props.theme.tvRating.tvma
+                  : props.theme.tvRating.nr};
   font-weight: 700;
   padding: ${(props) =>
     props.$rating === "R" || props.$rating === "G"
@@ -148,14 +117,6 @@ const Genres = styled.div`
   }
 `;
 
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    // visibility: "visible" as const, //const assertion
-    transition: { delay: 0.4, duration: 0.1, ease: "easeInOut" },
-  },
-};
-
 export const boxMaskVariants = {
   normal: { scale: 1 },
   hover: (custom: string) => ({
@@ -169,8 +130,8 @@ export const boxMaskVariants = {
       custom === "firstChild"
         ? "center left"
         : custom === "lastChild"
-        ? "center right"
-        : "center",
+          ? "center right"
+          : "center",
     transition: { delay: 0.4, duration: 3, ease: "easeInOut" },
   }),
 };
@@ -183,27 +144,17 @@ export function TVHoveringInfo(props: {
   console.log("TVHoveringInfo");
 
   const { movieId, title, movie } = props;
-  // const { title, movie } = props;
-
-  //   const [hovering, setHovering] = useRecoilState(hoverState);
-  // console.log("Hovering movie", movie.title, movie.id);
-  // console.log("movieId", movieId);
-
-  const [queryId, setQueryId] = useRecoilState(paramIdState);
-  const [rating, setRating] = useState();
 
   const { data: tvRating, isLoading: isTvRating } = useQuery<ITvRating>(
     ["tv", movieId],
-    () => getTvRating(movieId)
+    () => getTvRating(movieId),
   );
-  // console.log("tvRating", tvRating?.results[0].rating);
-  // console.log("tvRating", movieId, tvRating);
 
   let ratingTemp: string | null = null;
 
   const { data: tvDetails, isLoading: isTvDetails } = useQuery<IGetTvDetails>(
     ["tv", "tvDetails"],
-    () => getTvDetails(movieId)
+    () => getTvDetails(movieId),
   );
 
   console.log("tvDetails", tvDetails);
@@ -216,13 +167,13 @@ export function TVHoveringInfo(props: {
             let arr = [] as any;
             tvRating?.results?.filter((r) => {
               if (r.iso_3166_1 === "US") arr.push(r.rating);
-              console.log(arr);
+              return console.log(arr);
             });
             if (arr.length === 0) {
               console.log(
                 "arr.length === 0",
                 tvRating?.results[0]?.iso_3166_1,
-                tvRating?.results[0]?.rating
+                tvRating?.results[0]?.rating,
               );
 
               arr.push(tvRating?.results[0]?.rating);

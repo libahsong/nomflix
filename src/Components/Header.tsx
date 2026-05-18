@@ -1,17 +1,13 @@
 import {
-  AnimatePresence,
   motion,
   useAnimation,
-  useMotionValue,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
-import { hoverState } from "../atoms";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -25,7 +21,6 @@ const Nav = styled(motion.nav)`
   font-size: 16px;
   padding: 20px 60px;
   z-index: 5;
-  /* background-color: transparent; */
 `;
 
 const Logo = styled(motion.svg)`
@@ -71,19 +66,6 @@ const Col = styled.div`
   display: flex;
   align-items: center;
   z-index: -2;
-`;
-
-const SearchItems = styled(motion.div)`
-  transform-origin: right center;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  /* position: relative; */
-  z-index: -2;
-  width: 33vh;
-  height: 4vh;
-  border: 1px solid ${(props) => props.theme.white.lighter};
 `;
 
 const SearchIcon = styled(motion.svg)`
@@ -139,7 +121,7 @@ interface IForm {
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [closeButton, setCloseButton] = useState(false);
-  const [hovering, setHovering] = useRecoilState(hoverState);
+  // const [hovering, setHovering] = useRecoilState(hoverState);
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
   const inputAnimation = useAnimation();

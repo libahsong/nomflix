@@ -100,14 +100,14 @@ const RatingIcon = styled.div<{ $rating: string | null }>`
     props.$rating === "R"
       ? props.theme.rating.r
       : props.$rating === "PG"
-      ? props.theme.rating.pg
-      : props.$rating === "PG-13"
-      ? props.theme.rating.pg13
-      : props.$rating === "G"
-      ? props.theme.rating.g
-      : props.$rating === "NC-17"
-      ? props.theme.rating.nc17
-      : props.theme.rating.nr};
+        ? props.theme.rating.pg
+        : props.$rating === "PG-13"
+          ? props.theme.rating.pg13
+          : props.$rating === "G"
+            ? props.theme.rating.g
+            : props.$rating === "NC-17"
+              ? props.theme.rating.nc17
+              : props.theme.rating.nr};
   font-weight: 700;
   padding: ${(props) =>
     props.$rating === "R" || props.$rating === "G"
@@ -161,8 +161,8 @@ export const boxMaskVariants = {
       custom === "firstChild"
         ? "center left"
         : custom === "lastChild"
-        ? "center right"
-        : "center",
+          ? "center right"
+          : "center",
     transition: { delay: 0.4, duration: 3, ease: "easeInOut" },
   }),
 };
@@ -173,27 +173,17 @@ export function MovieHoveringInfo(props: {
   movie: IMovie | null;
 }) {
   const { movieId, title, movie } = props;
-  // const { title, movie } = props;
-  // console.log("MovieHoveringInfo movieId", title, movieId);
-
-  //   const [hovering, setHovering] = useRecoilState(hoverState);
-  // console.log("Hovering movie", movie.title, movie.id);
-  // console.log("movieId", movieId);
-
-  const [queryId, setQueryId] = useRecoilState(paramIdState);
-  const [rating, setRating] = useState();
 
   const { data: certification, isLoading: isMovieCertification } =
-    // useQuery<IMovieCertification>(["movie", "movieCertification"], () =>
     useQuery<IMovieCertification>(["movie", movieId], () =>
-      getMovieCertification(movieId)
+      getMovieCertification(movieId),
     );
 
   let ratingTemp: string | null = null;
 
   const { data: details, isLoading: isMovieDetails } =
     useQuery<IGetMovieDetails>(["movie", "movieDetails"], () =>
-      getMovieDetails(movieId)
+      getMovieDetails(movieId),
     );
 
   return (
@@ -207,7 +197,7 @@ export function MovieHoveringInfo(props: {
               .filter((r) =>
                 r.release_dates?.forEach((v) => {
                   if (v.certification !== "") arr.push(v.certification);
-                })
+                }),
               );
             ratingTemp = arr[0];
             return (

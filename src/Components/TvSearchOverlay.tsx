@@ -16,7 +16,7 @@ import {
   IMovie,
 } from "../api";
 import { makeImagePath } from "../utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useQuery } from "react-query";
 import { paramIdState } from "../atoms";
 import { useRecoilState } from "recoil";
@@ -79,32 +79,25 @@ function TvSearchOverlay(props: {
     history.push(`/search?keyword=${keyword}`);
   };
   const [queryId, setQueryId] = useRecoilState(paramIdState);
-  console.log("!!!!!!!!!!!!!!!!!!props id", id, "Recoil queryId", queryId);
 
   const { data: details, isLoading: isTvDetails } = useQuery<IGetTvDetails>(
     ["tv", "tvDetails"],
-    () => getTvDetails(+id)
+    () => getTvDetails(+id),
   );
-  // console.log("tvDetails", details);
 
   const { data: credits, isLoading: isTvCredits } = useQuery<IGetMovieCredits>(
     ["tv", "tvCredits"],
-    () => getTvCredits(+id)
+    () => getTvCredits(+id),
   );
 
   return (
-    // <AnimatePresence>
     <>
       <Overlay
         onClick={onOverlayClick}
         exit={{ opacity: 0, transition: { ease: "linear", duration: 1 } }}
         animate={{ opacity: 1 }}
       />
-      <BigMovie
-        // layoutId={urlMatch.params.movieId}
-        layoutId={id}
-        style={{ top: scrollY.get() + 100 }}
-      >
+      <BigMovie layoutId={id} style={{ top: scrollY.get() + 100 }}>
         {clickedContent ? (
           <>
             <BigCover
@@ -199,8 +192,8 @@ function TvSearchOverlay(props: {
                           .slice(0, 5)
                           .join()
                       : credits?.cast.length === 1
-                      ? credits?.cast.map((actor) => actor.name).join()
-                      : null}
+                        ? credits?.cast.map((actor) => actor.name).join()
+                        : null}
                   </li>
                 ) : null}
                 <li>
@@ -215,8 +208,6 @@ function TvSearchOverlay(props: {
         ) : null}
       </BigMovie>
     </>
-
-    // </AnimatePresence>
   );
 }
 

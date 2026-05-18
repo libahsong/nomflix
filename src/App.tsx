@@ -1,10 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  HashRouter,
-} from "react-router-dom";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./Routes/Home";
 import Tv from "./Routes/TV";
 import Search from "./Routes/Search";
@@ -15,8 +9,6 @@ function App() {
   return (
     <>
       <Router basename={process.env.PUBLIC_URL}>
-        {/* <Router> */}
-        {/* <HashRouter> */}
         <Header />
         <Switch>
           <Route path={["/tv", "/tv/:title/:movieId"]}>
@@ -31,8 +23,6 @@ function App() {
         </Switch>
         <Footer />
       </Router>
-      {/* </HashRouter> */}
-      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
     </>
   );
 }

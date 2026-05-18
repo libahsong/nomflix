@@ -92,62 +92,62 @@ function Footer() {
       </SocialLinks>
       <MemberLinks>
         <li>
-          <a>
+          <a href="/">
             <span>화면 해설</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>고객 센터</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>기프트카드</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>미디어 센터</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>투자 정보(IR)</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>입사 정보</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>이용 약관</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>개인 정보</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>법적 고지</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>쿠키 설정</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>회사 정보</span>
           </a>
         </li>
         <li>
-          <a>
+          <a href="/">
             <span>문의하기</span>
           </a>
         </li>

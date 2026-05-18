@@ -1,17 +1,6 @@
-import React, { MouseEvent, MouseEventHandler, useEffect } from "react";
 import styled from "styled-components";
-import {
-  AnimatePresence,
-  useScroll,
-  motion,
-  useIsPresent,
-} from "framer-motion";
-import {
-  getMovieCertification,
-  IGetMovieResult,
-  IMovie,
-  IMovieCertification,
-} from "../api";
+import { AnimatePresence, useScroll, motion } from "framer-motion";
+import { IGetMovieResult, IMovie } from "../api";
 import { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { makeImagePath } from "../utils";
@@ -19,11 +8,8 @@ import { useRecoilState } from "recoil";
 import { hoverState, overlayClickedState, paramIdState } from "../atoms";
 import MovieOverlay from "./MovieOverlay";
 import TvOverlay from "./TvOverlay";
-import { useQuery } from "react-query";
 import { MovieHoveringInfo } from "./MovieHoveringInfo";
 import { TVHoveringInfo } from "./TVHoveringInfo copy";
-import { set } from "react-hook-form";
-import { hover } from "@testing-library/user-event/dist/hover";
 
 export const Sliders = styled(motion.div)``;
 
@@ -33,17 +19,7 @@ export const Slider = styled(motion.div)`
   padding: 0 4%;
   box-sizing: border-box;
   height: 9vw;
-
-  /* position: sticky; */
-  /* z-index: 6; */
-  /* height: 20vw; */
-  /* position: absolute; */
   position: relative;
-  /* z-index: 0; */
-  /* height: 13vw; */
-  /* overflow-y: hidden; */
-  /* overflow-x: hidden; */
-  /* overflow: visible; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,39 +27,18 @@ export const Slider = styled(motion.div)`
 
 export const RowHover = styled(motion.div)`
   width: 100%;
-  /* overflow: auto; */
-  /* overflow: visible; */
-  /* height: 166px; */
-  /* overflow: visible; */
-
   position: relative;
-  /* z-index: 1; */
-  /* z-index: 0; */
-
   box-sizing: border-box;
 `;
+
 export const Row = styled(motion.div)<{ $movies: any }>`
-  /* overflow-x: hidden; */
-  /* overflow-y: hidden; */
   width: 92%;
   box-sizing: border-box;
-  /* max-width: 100%; */
   height: 100%;
   display: grid;
   gap: 0.4%;
   grid-template-columns: repeat(6, calc(98% / 6));
-  /* grid-template-columns: auto auto auto auto auto auto; */
-
   position: absolute;
-
-  /* position: relative; */
-  /* z-index: 5; */
-
-  /* overflow: auto; */
-  /* overflow-x: hidden; */
-  /* position: relative; */
-  /* z-index: 1; */
-  /* box-sizing: border-box; */
 `;
 
 export const BoxMask = styled(motion.div)<{ $bgPhoto: string | null }>`
@@ -244,7 +199,8 @@ export const BigCover = styled.div<{ $bgPhoto: string | null }>`
   width: 100%;
   height: 23vw;
   background-image: url(${(props) => props.$bgPhoto});
-  background: linear-gradient(
+  background:
+    linear-gradient(
       rgba(24, 24, 24, 0),
       rgba(24, 24, 24, 0),
       rgba(24, 24, 24, 1)
@@ -546,8 +502,8 @@ export const boxMaskVariants = {
       custom === "firstChild"
         ? "center left"
         : custom === "lastChild"
-        ? "center right"
-        : "center",
+          ? "center right"
+          : "center",
     transition: { delay: 0.4, duration: 3, ease: "easeInOut" },
   }),
 };
@@ -624,18 +580,18 @@ function SliderRow(props: {
   const history = useHistory();
 
   const bigMovieMatch = useRouteMatch<{ movieId: string; title: string }>(
-    "/movies/:title/:movieId"
+    "/movies/:title/:movieId",
   );
   const bigTvMatch = useRouteMatch<{ movieId: string; title: string }>(
-    "/tv/:title/:movieId"
+    "/tv/:title/:movieId",
   );
 
   let urlMatch: IUrlMatch | null = null;
   bigMovieMatch
     ? (urlMatch = bigMovieMatch)
     : bigTvMatch
-    ? (urlMatch = bigTvMatch)
-    : (urlMatch = null);
+      ? (urlMatch = bigTvMatch)
+      : (urlMatch = null);
 
   // console.log("urlMatch=>", urlMatch);
 
@@ -682,7 +638,7 @@ function SliderRow(props: {
     }
   };
   const onBoxHover = (
-    event: React.MouseEvent<HTMLDivElement>
+    event: React.MouseEvent<HTMLDivElement>,
     // event: MouseEvent<Element, MouseEvent>,
     // event: globalThis.MouseEvent
     // data: string
@@ -735,8 +691,8 @@ function SliderRow(props: {
   clickedMovie
     ? (clickedContent = clickedMovie)
     : clickedTv
-    ? (clickedContent = clickedTv)
-    : (clickedContent = null);
+      ? (clickedContent = clickedTv)
+      : (clickedContent = null);
 
   return (
     <>

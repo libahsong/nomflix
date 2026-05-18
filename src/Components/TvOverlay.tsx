@@ -11,7 +11,6 @@ import {
   BigContainer,
   BigCover,
   BigMovie,
-  BigMovieGradient,
   BigMovieInfo,
   BigOverview,
   BigTitle,
@@ -74,20 +73,19 @@ function TvOverlay(props: {
   category: string;
 }) {
   const { urlMatch, title, scrollY, clickedContent, category } = props;
-  // console.log("BigcardOverlay category", category);
 
   const history = useHistory();
   const [queryId, setQueryId] = useRecoilState(paramIdState);
 
   const { data: details, isLoading: isTvDetails } = useQuery<IGetTvDetails>(
     ["tv", "tvDetails"],
-    () => getTvDetails(queryId)
+    () => getTvDetails(queryId),
   );
   console.log("tvDetails", details);
 
   const { data: credits, isLoading: isTvCredits } = useQuery<IGetMovieCredits>(
     ["tv", "tvCredits"],
-    () => getTvCredits(queryId)
+    () => getTvCredits(queryId),
   );
 
   const onOverlayClick = () => {
@@ -107,7 +105,6 @@ function TvOverlay(props: {
           layoutId={urlMatch.params.movieId + title}
           style={{ top: scrollY.get() + 100 }}
         >
-          {/* <BigMovieGradient> */}
           {clickedContent ? (
             <>
               <BigCover
@@ -192,8 +189,8 @@ function TvOverlay(props: {
                             .slice(0, 5)
                             .join()
                         : credits?.cast.length === 1
-                        ? credits?.cast.map((actor) => actor.name).join()
-                        : null}
+                          ? credits?.cast.map((actor) => actor.name).join()
+                          : null}
                     </li>
                   ) : null}
 
@@ -205,7 +202,6 @@ function TvOverlay(props: {
               </BigContainer>
             </>
           ) : null}
-          {/* </BigMovieGradient> */}
         </BigMovie>
       ) : null}
     </>

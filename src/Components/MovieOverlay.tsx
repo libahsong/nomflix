@@ -11,7 +11,6 @@ import {
   BigContainer,
   BigCover,
   BigMovie,
-  BigMovieGradient,
   BigMovieInfo,
   BigOverview,
   BigTitle,
@@ -21,7 +20,7 @@ import {
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { overlayClickedState, paramIdState } from "../atoms";
 import { useQuery } from "react-query";
-import { AnimatePresence, easeInOut, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 
 const Button = styled.button`
@@ -79,7 +78,6 @@ function MovieOverlay(props: {
   category: string;
 }) {
   const { urlMatch, title, scrollY, clickedContent, category } = props;
-  // console.log("BigcardOverlay category", category);
 
   const history = useHistory();
   const [queryId, setQueryId] = useRecoilState(paramIdState);
@@ -87,15 +85,13 @@ function MovieOverlay(props: {
 
   const { data: details, isLoading: isMovieDetails } =
     useQuery<IGetMovieDetails>(["movie", "movieDetails"], () =>
-      getMovieDetails(queryId)
+      getMovieDetails(queryId),
     );
-  // console.log("MovieDetails", details);
 
   const { data: credits, isLoading: isMovieCredits } =
     useQuery<IGetMovieCredits>(["movie", "movieCredits"], () =>
-      getMovieCredits(queryId)
+      getMovieCredits(queryId),
     );
-  // console.log("MovieCredits", credits);
 
   const onOverlayClick = () => {
     setOverlayClick(true);
@@ -114,11 +110,9 @@ function MovieOverlay(props: {
         />
         {urlMatch?.params.title === title ? (
           <BigMovie
-            // layoutId={urlMatch.params.movieId + title}
             style={{ top: scrollY.get() + 100 }}
             variants={overlayVariants}
           >
-            {/* <BigMovieGradient> */}
             {clickedContent ? (
               <>
                 <BigCover
@@ -211,7 +205,6 @@ function MovieOverlay(props: {
                 </BigContainer>
               </>
             ) : null}
-            {/* </BigMovieGradient> */}
           </BigMovie>
         ) : null}
       </AnimatePresence>
