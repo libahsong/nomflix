@@ -68,7 +68,7 @@ function Search() {
   useEffect(() => {
     setQueryId(id ? +id : 0);
     setNewKeyword(keyword);
-  }, [keyword]);
+  }, [keyword, id, setQueryId]);
 
   const useMultipleQuery = () => {
     const movies = useQuery<IGetMovieResult>(["searchMovies", keyword], () =>

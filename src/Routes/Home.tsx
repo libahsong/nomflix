@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import styled from "styled-components";
 import SliderRow from "../Components/SliderRow";
 import { useQuery } from "react-query";
