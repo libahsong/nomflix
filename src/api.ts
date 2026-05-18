@@ -125,7 +125,7 @@ export interface IMCResults {
       note: string;
       release_date: string;
       type: number;
-    }
+    },
   ];
 }
 
@@ -142,102 +142,102 @@ export interface ITRResults {
 
 export function getMovies() {
   return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&page=1`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getPopularMovies() {
   return fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getTopRated() {
   return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getUpcoming() {
   return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getAiringTody() {
   return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getOnTheAir() {
   return fetch(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getPopularShows() {
   return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}`).then((response) =>
-    response.json()
+    response.json(),
   );
 }
 
 export function getTopRatedShows() {
   return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getSearchMovie(keyword: string) {
   return fetch(
-    `${BASE_PATH}/search/movie?query=${keyword}&api_key=${API_KEY}`
+    `${BASE_PATH}/search/movie?query=${keyword}&api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getSearchTv(keyword: string) {
   return fetch(
-    `${BASE_PATH}/search/tv?query=${keyword}&api_key=${API_KEY}`
+    `${BASE_PATH}/search/tv?query=${keyword}&api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getMovieGenres() {
   return fetch(
-    `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getMovieDetails(id: number | null) {
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getTvDetails(id: number | null) {
   return fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 
 export function getMovieCredits(id: number | null) {
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getTvCredits(id: number | null) {
   return fetch(
-    `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getMovieCertification(id: number | null) {
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/release_dates?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/movie/${id}/release_dates?api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
 
 export function getTvRating(id: number | null) {
   return fetch(
-    `https://api.themoviedb.org/3/tv/${id}/content_ratings?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/tv/${id}/content_ratings?api_key=${API_KEY}`,
   ).then((response) => response.json());
 }
